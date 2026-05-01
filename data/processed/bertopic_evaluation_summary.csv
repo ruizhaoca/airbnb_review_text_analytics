@@ -1,0 +1,7 @@
+metric,value
+outlier_rate,0.2327172630751081
+number_of_topics,53.0
+topic_diversity_at_10,0.2245283018867924
+topic_coherence_c_v,0.3957089151390888
+silhouette_score,0.0728046149015426
+davies_bouldin_index,2.9999428243490245
