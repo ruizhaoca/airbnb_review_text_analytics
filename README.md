@@ -1,24 +1,20 @@
 # Toronto Airbnb Review Text Analytics
-
-An end-to-end NLP pipeline that turns unstructured Airbnb review text into topic-level satisfaction insights for Toronto listings. The project combines **BERTopic**, **VADER sentiment scoring**, and a two-page **Power BI** dashboard so hosts can see *which* aspects of a stay drive guest satisfaction — not just the star rating.
+<img width="2360" height="1232" alt="Main Topic" src="https://github.com/user-attachments/assets/01f11378-1edd-40f6-a01b-49414bc70fa1" />
+<img width="2362" height="1232" alt="Subtopic" src="https://github.com/user-attachments/assets/3ec05955-00ed-4988-99db-3a18ff313735" />
 
 ---
+## Problem Overview
 
-## 📌 Problem Statement
-
-Airbnb provides overall and category ratings (e.g., cleanliness, location, communication), but these structured scores have important limitations:
+Airbnb provides overall and category ratings, but these structured scores have two limitations:
 
 - **Lack of granularity.** A single category rating does not reveal which specific issues drive satisfaction or dissatisfaction.
-- **Weak diagnostic value.** Ratings show what the score is, but not *why* guests feel that way, making it difficult for hosts to prioritize operational improvements.
 - **Hidden trade-offs.** Numeric ratings obscure trade-offs that guests typically only express in text (e.g., tolerating noise because of an excellent location).
 
-Guest experience directly affects ratings, visibility, and listing performance, yet much of the actionable insight lives in the unstructured comment field. This project transforms qualitative feedback into measurable topic-level metrics so hosts can identify priority improvement areas and benchmark performance across listings.
-
-Airbnb already uses six standard category ratings — **Cleanliness, Accuracy, Check-in, Communication, Location, Value**. We align our topic labels with those where applicable and introduce additional topics (**Comfort, Amenities, Experience**) where the text reviews reveal themes the standard categories don't capture.
+To solve this, this project transforms unstructured Toronto Airbnb review text into topic-level metrics by combining **BERTopic**, **Neural Network Autoencoder**, **LDA**, **VADER sentiment scoring**, and a **Power BI** report, so hosts can identify which aspects of a stay drive guest attention and satisfaction.
 
 ---
 
-## 📊 Dataset
+## Dataset
 
 - **Source:** [Inside Airbnb](https://insideairbnb.com/get-the-data/) — Toronto listings
 - **Files used:** `reviews.csv.gz` (review text + listing IDs) and `listings.csv` (listing metadata for the dashboard)
@@ -26,7 +22,7 @@ Airbnb already uses six standard category ratings — **Cleanliness, Accuracy, C
 
 ---
 
-## 🗂 Repository Structure
+## Repository Structure
 
 ```
 airbnb_review_text_analytics/
