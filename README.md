@@ -1,5 +1,6 @@
 # Toronto Airbnb Review Text Analytics
 <img width="2360" height="1232" alt="Main Topic" src="https://github.com/user-attachments/assets/01f11378-1edd-40f6-a01b-49414bc70fa1" />
+
 <img width="2362" height="1232" alt="Subtopic" src="https://github.com/user-attachments/assets/3ec05955-00ed-4988-99db-3a18ff313735" />
 
 ---
@@ -51,7 +52,7 @@ airbnb_review_text_analytics/
 
 ---
 
-## 🔧 Methodology
+## Methodology
 
 ### 1. Preprocessing & Segmentation — `1_preprocessing_and_bertopic.ipynb`
 - HTML and encoding cleanup with `ftfy` and `BeautifulSoup`.
@@ -59,12 +60,12 @@ airbnb_review_text_analytics/
 - Language detection with `langdetect`; non-English segments are dropped.
 - Text normalization with spaCy lemmatization and stop-word removal that **preserves negation words** (`not`, `no`, `never`) so polarity is not flipped during downstream sentiment scoring.
 
-### 2. Topic Modeling — BERTopic
+### 2. Topic Modeling — `1_preprocessing_and_bertopic.ipynb`
 - Sentence embeddings: `all-MiniLM-L6-v2` from `sentence-transformers`.
 - Dimensionality reduction: UMAP (`n_components=5`, cosine metric).
 - Clustering: HDBSCAN (`min_cluster_size=200`, `min_samples=30`).
 - Quality metrics: outlier rate, topic count, c_v coherence, topic diversity@10, silhouette score, Davies-Bouldin index.
-- **Manual topic mapping:** the raw 53 BERTopic clusters were consolidated into **33 interpretable subtopics under 9 main topics** aligned with Airbnb's existing category structure (Experience, Location, Communication, Comfort, Amenities, Cleanliness, Accuracy, Check-in, Value).
+- **Manual topic mapping:** the raw 53 BERTopic clusters were consolidated into **33 interpretable subtopics under 9 main topics** aligned with Airbnb's existing category structure (Cleanliness, Accuracy, Check-in, Communication, Location, Value).
 
 ### 3. Comparison Models — `2_neuron_network_and_lda.ipynb`
 Two alternatives were benchmarked against BERTopic for transparency:
@@ -76,63 +77,30 @@ LDA scored highest on silhouette and topic diversity, and the neural pipeline sc
 ### 4. Sentiment Scoring — `3_vader_sentiment_scoring.ipynb`
 - VADER compound score computed for each segment.
 - Converted to a **0–100 Satisfaction Index**: `satisfaction = (compound + 1) / 2 * 100`.
-- Sentiment label thresholds: `positive ≥ 0.05`, `negative ≤ -0.05`, otherwise `neutral`.
-- Aggregated to main-topic and subtopic levels for the dashboard.
+- **Sentiment label** thresholds: `positive ≥ 0.05`, `negative ≤ -0.05`, otherwise `neutral`.
+- Aggregated to main-topic and subtopic levels for the report.
 
 ---
 
-## 📈 Power BI Dashboard
+## Power BI Report
 
 Open `powerbi_report/toronto_airbnb_review_analytics_report.pbix`. The report has two pages and a listing-level filter, so hosts can switch between Toronto-wide benchmarks and a single-listing diagnosis.
 
 ### Page 1 — Main Topic Level
 City-wide overview across the 9 main topics:
 - KPI cards (listing, review, and segment counts) and a Toronto listing map.
-- Topic-share pie chart and average satisfaction radar.
-- Sentiment distribution (positive / neutral / negative) per topic.
-- **Topic Attention vs Satisfaction matrix** — a four-quadrant view that flags topics where guests talk a lot but satisfaction is low, i.e. priority improvement areas.
+- Main topic-share pie chart and average satisfaction radar.
+- Sentiment distribution (positive / neutral / negative) per main topic.
+- **Main Topic Attention vs Satisfaction matrix** — a four-quadrant view that flags topics where guests talk a lot but satisfaction is low, i.e. priority improvement areas.
 
 ### Page 2 — Subtopic Level
-Drill into any main topic (e.g., Comfort → *Interior Design, Bed Comfort, Overall Comfort, Interior Space & Natural Light, Basement & Ceiling*):
+Drill into any main topic (e.g., Comfort → Interior Design, Bed Comfort, Overall Comfort, Interior Space & Natural Light, Basement & Ceiling):
 - Sentence count and average satisfaction per subtopic.
 - Subtopic-level Attention vs Satisfaction matrix.
-- Snippet table of representative review segments with satisfaction scores and sentiment labels, so hosts see the actual guest wording behind every metric.
+- **Snippet table** of representative review segments with satisfaction scores and sentiment labels, so hosts see the actual guest wording behind every metric.
 
 ---
 
-## 🚀 How to Reproduce
+## Team
 
-1. Clone the repo and place the Inside Airbnb `reviews.csv.gz` file in `data/raw/`.
-2. Run the notebooks in order:
-   ```
-   notebooks/1_preprocessing_and_bertopic.ipynb
-   notebooks/2_neuron_network_and_lda.ipynb     # optional: comparison models only
-   notebooks/3_vader_sentiment_scoring.ipynb
-   ```
-3. Open `powerbi_report/toronto_airbnb_review_analytics_report.pbix` in Power BI Desktop. The report's data sources are `data/final/segment_df_with_topics_and_vader.csv` joined with `powerbi_report/listings.csv` on `listing_id`.
-
-### Requirements
-Notebook 1 installs all dependencies in its first cell. For reference, the main libraries are:
-
-```
-pandas, numpy, ftfy, beautifulsoup4, nltk, spacy (en_core_web_sm),
-sentence-transformers, bertopic, umap-learn, hdbscan, scikit-learn,
-langdetect, gensim, vaderSentiment, torch
-```
-
-A GPU is recommended for the embedding and autoencoder steps but is not required.
-
----
-
-## 🔑 Key Design Choices
-
-- **Sub-sentence segmentation.** Splitting on contrastive connectors prevents mixed-sentiment sentences from being averaged into a misleading neutral.
-- **Negation-preserving normalization.** Keeping `not`, `no`, and `never` is essential before VADER scoring — without it, "not clean" would score positive.
-- **Manual mapping on top of BERTopic.** Automated topics are noisy; aligning labels with Airbnb's existing rating categories makes the dashboard immediately legible to hosts and lets the analysis extend the standard 6 categories rather than replace them.
-- **Attention × Satisfaction framing.** The priority-improvement quadrant (high attention, low satisfaction) turns the dashboard into an action list rather than a static report.
-
----
-
-## 📜 Data License
-
-Review data is sourced from [Inside Airbnb](https://insideairbnb.com/) under their stated terms of use; please consult their site before redistribution.
+Rui Zhao, Wendy Xu, Al Cheaito, David Fogel, Zhaihan Gong
