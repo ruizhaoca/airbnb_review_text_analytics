@@ -1,6 +1,5 @@
 # Toronto Airbnb Review Text Analytics
 
----
 <img width="2360" height="1232" alt="Main Topic" src="https://github.com/user-attachments/assets/01f11378-1edd-40f6-a01b-49414bc70fa1" />
 
 ---
